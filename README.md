@@ -1,24 +1,39 @@
-# cTwinPrimeNumberParallel
+# cFloydWarshallParallel
 
 <p align="center">
       <img src="https://user-images.githubusercontent.com/59691442/183268126-b3d19e66-8f2d-463a-805e-ae6ef7cc6c01.png" alt="cmakeLogo" style="height:60px;"/>
-      <img src="https://img.shields.io/badge/C%2B%2B-00599C?style=for-the-badge&logo=c%2B%2B&logoColor=white" alt="cppLogo" style="height:60px;"/>
-
-[//]: # (      <img src="https://user-images.githubusercontent.com/59691442/204111351-40876ca8-3bb8-49a6-96e2-6aa3bfcc21f4.png" alt="mpiLogo" style="height:60px;"/>)
+      <img src="https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white" alt="cppLogo" style="height:60px;"/>
+      <img src="https://user-images.githubusercontent.com/59691442/206360390-76940955-0a28-43b5-83fb-46409c4324f7.png" alt="openclLogo" style="height:60px;"/>
 </p>
-
-<!--
 
 ## Description
 
-This is a simple program that calculates the prime and twin prime numbers in a given range. It uses the parallel
-programming
-library MPI to parallelize the calculation.
+This is a parallel implementation of the Floyd-Warshall algorithm using OpenCL.
 
-The Prime algorithm is based on the Sieve of Eratosthenes. The original algorithm from Peter Pacheco for its
-book `from Parallel Programming in C with MPI and OpenMP` is modified to work with small ranges and another version to
-work with prime numbers.
+The algorithm is implemented in C and the OpenCL kernel is written in OpenCL C. The program is compiled using CMake.
 
+## Algorithm
+
+<!--
+The algorithm is implemented using the following steps:
+1. Read the input file and store the graph in a matrix
+2. Create a buffer for the graph matrix and copy the graph matrix to the buffer
+3. Create a buffer for the result matrix and copy the graph matrix to the result buffer
+4. Create a kernel and set the arguments
+5. Execute the kernel
+6. Read the result matrix from the result buffer
+7. Print the result matrix
+8. Free the memory
+9. Exit
+10. PROFIT!
+11. (Optional) Write the result matrix to a file
+12. (Optional) Print the execution time
+13. (Optional) Print the execution time for each kernel execution
+14. (Optional) Print the execution time for each kernel execution and the total execution time
+15. (Optional) Print the execution time for each kernel execution and the total execution time and write the result matrix to a file
+-->
+
+<!--
 ## Algorithm
 
 The algorithm used to calculate the twin prime numbers is the Sieve of Eratosthenes. It is a simple, ancient algorithm
