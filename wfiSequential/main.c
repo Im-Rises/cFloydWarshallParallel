@@ -35,6 +35,7 @@ void floydWarshall(int graph[][nV]) {
 }
 
 void printMatrix(int matrix[][nV]) {
+    printf("|-----Floyd–Warshall algorithm-----|\n\n");
     for (int i = 0; i < nV; i++)
     {
         for (int j = 0; j < nV; j++)

@@ -7,7 +7,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+char* programSource = "__kernel void add(__global int* a, __global int* b, __global int* c) { int i = get_global_id(0); c[i] = a[i] + b[i]; }";
+
 int main(int argc, char* argv[]) {
+    printf("|-----Floyd–Warshall parallel algorithm-----|\n\n");
     if (argc < 2)
     {
         printf("Usage: %s <matrix size> ", argv[0]);

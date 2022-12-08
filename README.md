@@ -286,7 +286,8 @@ flawfinder : This workflow will analyze the code to find bugs and potential vuln
 ## Documentation
 
 Wikipedia:  
-<https://en.wikipedia.org/wiki/Floyd–Warshall_algorithm>
+<https://en.wikipedia.org/wiki/Floyd–Warshall_algorithm>  
+<https://en.wikipedia.org/wiki/Parallel_all-pairs_shortest_path_algorithm#Parallelization>
 
 programiz:  
 <https://www.programiz.com/dsa/floyd-warshall-algorithm>
