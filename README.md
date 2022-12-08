@@ -281,24 +281,15 @@ CMake : This workflow will build the program using the CMake build system.
 CodeQL : This workflow will analyze the code to find security vulnerabilities.  
 cpp-linter : This workflow will analyze the code to find bugs and potential vulnerabilities.  
 flawfinder : This workflow will analyze the code to find bugs and potential vulnerabilities.
+-->
 
 ## Documentation
 
-Parallel Programming in C with MPI and OpenMP, Second Edition, by Peter Pacheco, 2010, ISBN 978-0-470-66572-1
+Wikipedia:  
+<https://en.wikipedia.org/wiki/Floyd–Warshall_algorithm>
 
-Code from marius92mc's repository:  
-<https://github.com/marius92mc/sieve-of-eratosthenes-with-MPI>
-
-Sieve of Eratosthenes:  
-<https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes>
-
-MPI Hello World:  
-<https://mpitutorial.com/tutorials/mpi-hello-world/>
-
-MPI website:  
-<https://www.open-mpi.org/>
-
--->
+programiz:  
+<https://www.programiz.com/dsa/floyd-warshall-algorithm>
 
 ## Contributors
 
