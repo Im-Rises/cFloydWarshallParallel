@@ -44,7 +44,7 @@ jobs:
         run: |
           sudo apt-get install make
           sudo apt-get install gcc
-          sudo apt-get install openmpi-bin openmpi-doc libopenmpi-dev
+          sudo apt install ocl-icd-opencl-dev
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
