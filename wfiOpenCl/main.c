@@ -8,16 +8,17 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-const char* floydProgramSource = "kernel void floyd(global int *a, int n) {"
-                                 "int i = get_global_id(0);"
-                                 "int j = get_global_id(1);"
-                                 "int ij = i*n+j;"
-                                 "int ik = i*n+k;"
-                                 "int kj = k*n+j;"
-                                 "if (a[ik] + a[kj] < a[ij]) {"
-                                 "a[ij] = a[ik] + a[kj];"
-                                 "}"
-                                 "}\0";
+// const char* floydProgramSource = "kernel void floyd(global int *a, int k, int n) {"
+//                                  "int i = get_global_id(0);"
+//                                  "int j = get_global_id(1);"
+//                                  "int k = get_global_id(2);"
+//                                  "int ij = i*n+j;"
+//                                  "int ik = i*n+k;"
+//                                  "int kj = k*n+j;"
+//                                  "if (a[ik] + a[kj] < a[ij]) {"
+//                                  "a[ij] = a[ik] + a[kj];"
+//                                  "}"
+//                                  "}\0";
 
 
 char* readProgramFile(const char* filename) {
@@ -27,10 +28,9 @@ char* readProgramFile(const char* filename) {
     struct stat status;
 
     fp = fopen(filename, "r");
-    if (fp == 0)
+    if (fp == NULL)
     {
-        printf("Cannot read OpenCL file.\n");
-        return 0;
+        return NULL;
     }
 
     if (stat(filename, &status) == 0)
@@ -44,6 +44,13 @@ char* readProgramFile(const char* filename) {
 
 int main(int argc, char* argv[]) {
     printf("|-----Floyd-Warshall parallel algorithm-----|\n\n");
+
+    if (argc != 2)
+    {
+        printf("Usage: %s <n value>\n", argv[0]);
+        return 1;
+    }
+    int n = atoi(argv[1]);
 
     // STEP 0: Init variables
     char* programSourceFilename = "data/program.cl";
@@ -86,6 +93,11 @@ int main(int argc, char* argv[]) {
 
     // STEP 5: Create program object
     char* programSource = readProgramFile(programSourceFilename);
+    if (programSource == NULL)
+    {
+        perror("Cannot read OpenCL file.\n");
+        return 1;
+    }
     cl_program program = clCreateProgramWithSource(context, 1, (const char**)&programSource, NULL, &status);
 
     // STEP 6: Build program
@@ -106,7 +118,6 @@ int main(int argc, char* argv[]) {
     kernel = clCreateKernel(program, "floydWarshall", &status);
 
     // STEP 8: Create buffers
-    int n = 4;
     int* A = (int*)malloc(n * n * sizeof(int));
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
@@ -143,7 +154,7 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
-            printf("%d ", A[i * n + j]);
+            printf("%04d ", A[i * n + j]);
         printf("\n");
     }
 
