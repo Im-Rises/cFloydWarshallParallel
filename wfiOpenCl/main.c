@@ -8,18 +8,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-// const char* floydProgramSource = "kernel void floyd(global int *a, int k, int n) {"
-//                                  "int i = get_global_id(0);"
-//                                  "int j = get_global_id(1);"
-//                                  "int k = get_global_id(2);"
-//                                  "int ij = i*n+j;"
-//                                  "int ik = i*n+k;"
-//                                  "int kj = k*n+j;"
-//                                  "if (a[ik] + a[kj] < a[ij]) {"
-//                                  "a[ij] = a[ik] + a[kj];"
-//                                  "}"
-//                                  "}\0";
-
+//#define MAX_VALUE 9999
 
 char* readProgramFile(const char* filename) {
     FILE* fp;
@@ -62,17 +51,16 @@ int main(int argc, char* argv[]) {
     cl_context context = NULL;
     cl_command_queue cmdQueue = NULL;
     cl_kernel kernel = NULL;
+    char platformName[1000];
 
     // STEP 1: Discover and initialize the platforms
     status = clGetPlatformIDs(0, NULL, &numPlatforms);
     printf("Number of platforms = %d\n", numPlatforms);
     platforms = (cl_platform_id*)malloc(numPlatforms * sizeof(cl_platform_id));
     status = clGetPlatformIDs(numPlatforms, platforms, NULL);
-    char platformName[1000];
     clGetPlatformInfo(*platforms, CL_PLATFORM_NAME, sizeof(platformName), platformName, NULL);
     printf("Name of platform : %s\n", platformName);
     fflush(stdout);
-
 
     // STEP 2: Discover and initialize the devices
     status = clGetDeviceIDs(*platforms, CL_DEVICE_TYPE_ALL, 0, NULL, &numDevices);
@@ -131,7 +119,8 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
             if (i != j && A[i * n + j] == 0)
-                A[i * n + j] = 9999;
+                A[i * n + j] = n + 1;
+    //                A[i * n + j] = MAX_VALUE;
     cl_mem A_buf = clCreateBuffer(context, CL_MEM_READ_WRITE, n * n * sizeof(int), NULL, &status);
     status = clEnqueueWriteBuffer(cmdQueue, A_buf, CL_TRUE, 0, n * n * sizeof(int), A, 0, NULL, NULL);
 
