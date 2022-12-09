@@ -4,10 +4,10 @@ all:
 	$(MAKE) clean
 
 wfiSeq:
-	gcc -o buildMakeFile/wfiSequential wfiSequential/main.c
+	gcc -o buildMakeFile/wfiSequential wfiSequential/main.c -std=c90 -Wall -Wextra -Werror -pedantic
 
 wfiParallel:
-	gcc -o buildMakeFile/wfiParallel wfiParallel/main.c
+	gcc -o buildMakeFile/wfiParallel wfiParallel/main.c -std=c90 -Wall -Wextra -Werror -pedantic
 
 MrProper : clean
 	rm -f buildMakeFile/primeNumberFinderSequential

@@ -35,10 +35,10 @@ void floydWarshall(int graph[][nV]) {
 }
 
 void printMatrix(int matrix[][nV]) {
-    printf("|-----Floyd–Warshall algorithm-----|\n\n");
-    for (int i = 0; i < nV; i++)
+    int i, j;
+    for (i = 0; i < nV; i++)
     {
-        for (int j = 0; j < nV; j++)
+        for (j = 0; j < nV; j++)
         {
             if (matrix[i][j] == INF)
                 printf("%4s", "INF");
@@ -50,6 +50,7 @@ void printMatrix(int matrix[][nV]) {
 }
 
 int main() {
+    printf("|-----Floyd-Warshall algorithm-----|\n\n");
     int graph[nV][nV] = { { 0, 3, INF, 5 },
         { 2, 0, INF, 4 },
         { INF, 1, 0, INF },
