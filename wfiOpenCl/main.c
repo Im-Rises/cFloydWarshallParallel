@@ -8,16 +8,16 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-char* floyProgramSource = "kernel void floy(global int *a, int n) {"
-                          "int i = get_global_id(0);"
-                          "int j = get_global_id(1);"
-                          "int ij = i*n+j;"
-                          "int ik = i*n+k;"
-                          "int kj = k*n+j;"
-                          "if (a[ik] + a[kj] < a[ij]) {"
-                          "a[ij] = a[ik] + a[kj];"
-                          "}"
-                          "}\0";
+const char* floydProgramSource = "kernel void floyd(global int *a, int n) {"
+                                 "int i = get_global_id(0);"
+                                 "int j = get_global_id(1);"
+                                 "int ij = i*n+j;"
+                                 "int ik = i*n+k;"
+                                 "int kj = k*n+j;"
+                                 "if (a[ik] + a[kj] < a[ij]) {"
+                                 "a[ij] = a[ik] + a[kj];"
+                                 "}"
+                                 "}\0";
 
 
 char* readProgramFile(const char* filename) {
@@ -46,13 +46,14 @@ int main(int argc, char* argv[]) {
     printf("|-----Floyd-Warshall parallel algorithm-----|\n\n");
 
     // STEP 0: Init variables
-    cl_int status;
+    char* programSourceFilename = "data/program.cl";
+    cl_int status = 0;
     cl_uint numPlatforms = 0;
     cl_platform_id* platforms = NULL;
-    cl_uint numDevices;
+    cl_uint numDevices = 0;
     cl_device_id* devices = NULL;
     cl_context context = NULL;
-    cl_command_queue cmdQueue;
+    cl_command_queue cmdQueue = NULL;
     cl_kernel kernel = NULL;
 
     // STEP 1: Discover and initialize the platforms
@@ -60,9 +61,9 @@ int main(int argc, char* argv[]) {
     printf("Number of platforms = %d\n", numPlatforms);
     platforms = (cl_platform_id*)malloc(numPlatforms * sizeof(cl_platform_id));
     status = clGetPlatformIDs(numPlatforms, platforms, NULL);
-    char Name[1000];
-    clGetPlatformInfo(*platforms, CL_PLATFORM_NAME, sizeof(Name), Name, NULL);
-    printf("Name of platform : %s\n", Name);
+    char platformName[1000];
+    clGetPlatformInfo(*platforms, CL_PLATFORM_NAME, sizeof(platformName), platformName, NULL);
+    printf("Name of platform : %s\n", platformName);
     fflush(stdout);
 
 
@@ -73,8 +74,8 @@ int main(int argc, char* argv[]) {
     status = clGetDeviceIDs(*platforms, CL_DEVICE_TYPE_ALL, numDevices, devices, NULL);
     for (int i = 0; i < numDevices; i++)
     {
-        clGetDeviceInfo(devices[i], CL_DEVICE_NAME, sizeof(Name), Name, NULL);
-        printf("Name of device %d: %s\n\n", i, Name);
+        clGetDeviceInfo(devices[i], CL_DEVICE_NAME, sizeof(platformName), platformName, NULL);
+        printf("Name of device %d: %s\n\n", i, platformName);
     }
 
     // STEP 3: Create a context
@@ -84,8 +85,7 @@ int main(int argc, char* argv[]) {
     cmdQueue = clCreateCommandQueue(context, devices, 0, &status);
 
     // STEP 5: Create program object
-    char* programSource = readProgramFile("data/program.cl");
-    programSource = floyProgramSource;
+    char* programSource = readProgramFile(programSourceFilename);
     cl_program program = clCreateProgramWithSource(context, 1, (const char**)&programSource, NULL, &status);
 
     // STEP 6: Build program
