@@ -33,7 +33,6 @@ The algorithm is implemented using the following steps:
 15. (Optional) Print the execution time for each kernel execution and the total execution time and write the result matrix to a file
 -->
 
-<!--
 ## Algorithm
 
 PLACEHOLDER
@@ -189,6 +188,9 @@ CMake : This workflow will build the program using the CMake build system.
 CodeQL : This workflow will analyze the code to find security vulnerabilities.  
 cpp-linter : This workflow will analyze the code to find bugs and potential vulnerabilities.  
 flawfinder : This workflow will analyze the code to find bugs and potential vulnerabilities.
+
+> **Note:**  
+> The CMake workflow is not working yet for Windows.
 
 ## Documentation
 
