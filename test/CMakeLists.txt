@@ -1,10 +1,7 @@
-set(SRCS_TEST "myPlaceholderTest.c")
+set(SRCS_TEST "wfiOpenClTest.c" "wfiSequentialTest.cpp")
 
 set(COMMON_FUNCTIONS_HEADERS)
 set(COMMON_FUNCTIONS_SOURCES)
-
-#set(HEADERS "../mergeSortSequential/mergeSortSequential.h" "../mergeSortOpenMp/mergeSortParallelOpenMp.h")
-#set(SRCS "../mergeSortSequential/mergeSortSequential.c" "../mergeSortOpenMp/mergeSortParallelOpenMp.c")
 
 enable_testing()
 

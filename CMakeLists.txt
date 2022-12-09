@@ -1,11 +1,8 @@
-﻿cmake_minimum_required(VERSION 3.8)
+﻿cmake_minimum_required(VERSION 3.9)
 
-set(CMAKE_C_STANDARD 90)
+set(CMAKE_C_STANDARD 17)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
-
-project("OpenCLTestProject")
-add_subdirectory(${PROJECT_NAME})
 
 project("wfiSequential")
 add_subdirectory(${PROJECT_NAME})
