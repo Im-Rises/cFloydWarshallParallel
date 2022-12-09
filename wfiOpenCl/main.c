@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-//#define MAX_VALUE 9999
+#define MAX_VALUE 9999
 
 char* readProgramFile(const char* filename) {
     FILE* fp;
@@ -119,21 +119,31 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < n; i++)
         for (int j = 0; j < n; j++)
             if (i != j && A[i * n + j] == 0)
-                A[i * n + j] = n + 1;
-    //                A[i * n + j] = MAX_VALUE;
+                A[i * n + j] = MAX_VALUE;
+    //          A[i * n + j] = n + 1;
     cl_mem A_buf = clCreateBuffer(context, CL_MEM_READ_WRITE, n * n * sizeof(int), NULL, &status);
     status = clEnqueueWriteBuffer(cmdQueue, A_buf, CL_TRUE, 0, n * n * sizeof(int), A, 0, NULL, NULL);
 
-    // STEP 9: Set kernel arguments
-    status = clSetKernelArg(kernel, 0, sizeof(cl_mem), &A_buf);
-    status = clSetKernelArg(kernel, 1, sizeof(int), &n);
-
-    // STEP 10: Configure work-item structure
+    // STEP 9: Configure work-item structure
     size_t globalWorkSize[2] = { n, n };
     size_t localWorkSize[2] = { 1, 1 };
 
+    // STEP 10: Set kernel arguments
+    status = clSetKernelArg(kernel, 0, sizeof(cl_mem), &A_buf);
+    status = clSetKernelArg(kernel, 1, sizeof(int), &n);
+
+    //    // STEP 11: Enqueue kernel for execution
+    //    status = clEnqueueNDRangeKernel(cmdQueue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
+    //
+    //    // STEP 12: Read the output buffer back to the host
+    //    status = clEnqueueReadBuffer(cmdQueue, A_buf, CL_TRUE, 0, n * n * sizeof(int), A, 0, NULL, NULL);
+
     // STEP 11: Enqueue kernel for execution
-    status = clEnqueueNDRangeKernel(cmdQueue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
+    for (int k = 0; k < n; k++)
+    {
+        status = clSetKernelArg(kernel, 2, sizeof(int), &k);
+        status = clEnqueueNDRangeKernel(cmdQueue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
+    }
 
     // STEP 12: Read the output buffer back to the host
     status = clEnqueueReadBuffer(cmdQueue, A_buf, CL_TRUE, 0, n * n * sizeof(int), A, 0, NULL, NULL);
