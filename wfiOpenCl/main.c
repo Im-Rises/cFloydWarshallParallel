@@ -11,7 +11,6 @@
 char* floyProgramSource = "kernel void floy(global int *a, int n) {"
                           "int i = get_global_id(0);"
                           "int j = get_global_id(1);"
-                          "int k = get_global_id(2);"
                           "int ij = i*n+j;"
                           "int ik = i*n+k;"
                           "int kj = k*n+j;"
