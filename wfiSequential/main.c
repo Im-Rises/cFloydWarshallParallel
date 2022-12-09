@@ -56,4 +56,5 @@ int main() {
         { INF, 1, 0, INF },
         { INF, INF, 2, 0 } };
     floydWarshall(graph);
+    return 0;
 }
