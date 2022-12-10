@@ -32,17 +32,19 @@ char* readProgramFile(const char* filename) {
 }
 
 int main(int argc, char* argv[]) {
-    printf("|-----Floyd-Warshall parallel algorithm-----|\n\n");
+    printf("|-----Floyd-Warshall parallel OpenCL algorithm-----|\n\n");
 
+    // Check the command line arguments
     if (argc != 2)
     {
         printf("Usage: %s <n value>\n", argv[0]);
         return 1;
     }
-    int n = atoi(argv[1]);
+    cl_int n = atoi(argv[1]);
 
     // STEP 0: Init variables
     char* programSourceFilename = "data/program.cl";
+    char* programFunction = "floydWarshall";
     cl_int status = 0;
     cl_uint numPlatforms = 0;
     cl_platform_id* platforms = NULL;
@@ -60,13 +62,12 @@ int main(int argc, char* argv[]) {
     status = clGetPlatformIDs(numPlatforms, platforms, NULL);
     clGetPlatformInfo(*platforms, CL_PLATFORM_NAME, sizeof(platformName), platformName, NULL);
     printf("Name of platform : %s\n", platformName);
-    fflush(stdout);
 
     // STEP 2: Discover and initialize the devices
-    status = clGetDeviceIDs(*platforms, CL_DEVICE_TYPE_ALL, 0, NULL, &numDevices);
+    status = clGetDeviceIDs(platforms[0], CL_DEVICE_TYPE_ALL, 0, NULL, &numDevices);
     printf("Number of devices = %d\n", (int)numDevices);
     devices = (cl_device_id*)malloc(numDevices * sizeof(cl_device_id));
-    status = clGetDeviceIDs(*platforms, CL_DEVICE_TYPE_ALL, numDevices, devices, NULL);
+    status = clGetDeviceIDs(platforms[0], CL_DEVICE_TYPE_ALL, numDevices, devices, NULL);
     for (int i = 0; i < numDevices; i++)
     {
         clGetDeviceInfo(devices[i], CL_DEVICE_NAME, sizeof(platformName), platformName, NULL);
@@ -77,7 +78,7 @@ int main(int argc, char* argv[]) {
     context = clCreateContext(NULL, numDevices, devices, NULL, NULL, &status);
 
     // STEP 4: Create a command queue
-    cmdQueue = clCreateCommandQueue(context, devices, 0, &status);
+    cmdQueue = clCreateCommandQueue(context, devices[0], 0, &status);
 
     // STEP 5: Create program object
     char* programSource = readProgramFile(programSourceFilename);
@@ -93,17 +94,15 @@ int main(int argc, char* argv[]) {
     if (status != CL_SUCCESS)
     {
         printf("Error in building program.\n");
-        fflush(stdout);
         size_t len;
         char buffer[2048];
         clGetProgramBuildInfo(program, devices[0], CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
         printf("%s \n", buffer);
-        fflush(stdout);
         exit(1);
     }
 
     // STEP 7: Create kernel object
-    kernel = clCreateKernel(program, "floydWarshall", &status);
+    kernel = clCreateKernel(program, programFunction, &status);
 
     // STEP 8: Create buffers
     int* A = (int*)malloc(n * n * sizeof(int));
@@ -126,22 +125,16 @@ int main(int argc, char* argv[]) {
 
     // STEP 9: Configure work-item structure
     size_t globalWorkSize[2] = { n, n };
-    size_t localWorkSize[2] = { 1, 1 };
+    size_t localWorkSize[2] = { 1, 1 }; // TODO: change to 16x16 or something else
 
     // STEP 10: Set kernel arguments
     status = clSetKernelArg(kernel, 0, sizeof(cl_mem), &A_buf);
-    status = clSetKernelArg(kernel, 1, sizeof(int), &n);
+    status = clSetKernelArg(kernel, 2, sizeof(cl_int), &n);
 
-    //    // STEP 11: Enqueue kernel for execution
-    //    status = clEnqueueNDRangeKernel(cmdQueue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
-    //
-    //    // STEP 12: Read the output buffer back to the host
-    //    status = clEnqueueReadBuffer(cmdQueue, A_buf, CL_TRUE, 0, n * n * sizeof(int), A, 0, NULL, NULL);
-
-    // STEP 11: Enqueue kernel for execution
+    // STEP 11: Enqueue kernel for execution and execute for each k = 0, 1, ..., n - 1
     for (int k = 0; k < n; k++)
     {
-        status = clSetKernelArg(kernel, 2, sizeof(int), &k);
+        status = clSetKernelArg(kernel, 1, sizeof(int), &k);
         status = clEnqueueNDRangeKernel(cmdQueue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
     }
 
