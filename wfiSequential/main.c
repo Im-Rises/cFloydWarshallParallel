@@ -31,6 +31,7 @@ void floydWarshall(int graph[][nV]) {
             }
         }
     }
+    printf("Result matrix is:\n");
     printMatrix(matrix);
 }
 
@@ -47,14 +48,19 @@ void printMatrix(int matrix[][nV]) {
         }
         printf("\n");
     }
+    printf("\n");
 }
 
 int main() {
     printf("|-----Floyd-Warshall algorithm-----|\n\n");
+
     int graph[nV][nV] = { { 0, 3, INF, 5 },
         { 2, 0, INF, 4 },
         { INF, 1, 0, INF },
         { INF, INF, 2, 0 } };
+    printf("Init matrix:\n");
+    printMatrix(graph);
+
     floydWarshall(graph);
     return 0;
 }
