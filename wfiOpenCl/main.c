@@ -31,6 +31,21 @@ char* readProgramFile(const char* filename) {
     return source;
 }
 
+void printMatrix(int* matrix, int nV) {
+    int i, j;
+    for (i = 0; i < nV; i++)
+    {
+        for (j = 0; j < nV; j++)
+        {
+            if (matrix[i * nV + j] == MAX_VALUE)
+                printf("%4s", "INF");
+            else
+                printf("%4d", matrix[i * nV + j]);
+        }
+        printf("\n");
+    }
+}
+
 int main(int argc, char* argv[]) {
     printf("|-----Floyd-Warshall parallel OpenCL algorithm-----|\n\n");
 
@@ -104,28 +119,52 @@ int main(int argc, char* argv[]) {
     // STEP 7: Create kernel object
     kernel = clCreateKernel(program, programFunction, &status);
 
-    // STEP 8: Create buffers
+    //    // STEP 8: Create buffers
+    //    int* A = (int*)malloc(n * n * sizeof(int));
+    //    for (int i = 0; i < n; i++)
+    //        for (int j = 0; j < n; j++)
+    //            A[i * n + j] = 0;
+    //    A[0 * n + 1] = 1;
+    //    A[0 * n + 2] = 2;
+    //    A[0 * n + 3] = 3;
+    //    A[1 * n + 2] = 4;
+    //    A[1 * n + 3] = 5;
+    //    A[2 * n + 3] = 6;
+    //    for (int i = 0; i < n; i++)
+    //        for (int j = 0; j < n; j++)
+    //            if (i != j && A[i * n + j] == 0)
+    //                A[i * n + j] = MAX_VALUE;
+    //          A[i * n + j] = n + 1;
+
+    /* START DEBUG */
+    n = 4;
     int* A = (int*)malloc(n * n * sizeof(int));
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            A[i * n + j] = 0;
+    A[0 * n + 0] = 0;
     A[0 * n + 1] = 1;
     A[0 * n + 2] = 2;
     A[0 * n + 3] = 3;
+    A[1 * n + 0] = 1;
+    A[1 * n + 1] = 0;
     A[1 * n + 2] = 4;
     A[1 * n + 3] = 5;
+    A[2 * n + 0] = 2;
+    A[2 * n + 1] = 4;
+    A[2 * n + 2] = 0;
     A[2 * n + 3] = 6;
-    for (int i = 0; i < n; i++)
-        for (int j = 0; j < n; j++)
-            if (i != j && A[i * n + j] == 0)
-                A[i * n + j] = MAX_VALUE;
-    //          A[i * n + j] = n + 1;
+    A[3 * n + 0] = 3;
+    A[3 * n + 1] = 5;
+    A[3 * n + 2] = 6;
+    A[3 * n + 3] = 0;
+    printf("Initial matrix:\n");
+    printMatrix(A, n);
+    /* END DEBUG */
+
     cl_mem A_buf = clCreateBuffer(context, CL_MEM_READ_WRITE, n * n * sizeof(int), NULL, &status);
     status = clEnqueueWriteBuffer(cmdQueue, A_buf, CL_TRUE, 0, n * n * sizeof(int), A, 0, NULL, NULL);
 
     // STEP 9: Configure work-item structure
     size_t globalWorkSize[2] = { n, n };
-    size_t localWorkSize[2] = { 1, 1 }; // TODO: change to 16x16 or something else
+    size_t localWorkSize[2] = { 1, 1 }; // TODO: change to something else
 
     // STEP 10: Set kernel arguments
     status = clSetKernelArg(kernel, 0, sizeof(cl_mem), &A_buf);
@@ -143,12 +182,13 @@ int main(int argc, char* argv[]) {
 
     // STEP 13: Display the result
     printf("Result:\n");
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-            printf("%04d ", A[i * n + j]);
-        printf("\n");
-    }
+    //    for (int i = 0; i < n; i++)
+    //    {
+    //        for (int j = 0; j < n; j++)
+    //            printf("%04d ", A[i * n + j]);
+    //        printf("\n");
+    //    }
+    printMatrix(A, n);
 
     // STEP 14: Release OpenCL resources
     clReleaseKernel(kernel);
