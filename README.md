@@ -33,8 +33,6 @@ The algorithm is implemented using the following steps:
 15. (Optional) Print the execution time for each kernel execution and the total execution time and write the result matrix to a file
 -->
 
-## Algorithm
-
 PLACEHOLDER
 
 ## Results
@@ -203,6 +201,9 @@ programiz:
 
 geekeforgeeks:  
 <https://www.geeksforgeeks.org/floyd-warshall-algorithm-dp-16/>
+
+moorejs:  
+<https://moorejs.github.io/APSP-in-parallel/>
 
 ## Contributors
 

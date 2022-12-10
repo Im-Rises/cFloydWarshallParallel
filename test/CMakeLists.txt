@@ -1,4 +1,4 @@
-set(SRCS_TEST "wfiOpenClTest.c" "wfiSequentialTest.cpp")
+set(SRCS_TEST "wfiOpenClTest.c" "wfiSequentialTest.c")
 
 set(COMMON_FUNCTIONS_HEADERS)
 set(COMMON_FUNCTIONS_SOURCES)
