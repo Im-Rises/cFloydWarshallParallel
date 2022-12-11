@@ -1,66 +1,75 @@
-// Floyd-Warshall Algorithm in C
-
-// https://www.geeksforgeeks.org/floyd-warshall-algorithm-dp-16/
-
 #include <stdio.h>
+#include <stdlib.h>
 
-// defining the number of vertices
-#define nV 4
-
-#define INF 999
-
-void printMatrix(int matrix[][nV]);
-
-// Implementing floyd warshall algorithm
-void floydWarshall(int graph[][nV]) {
-    int matrix[nV][nV], i, j, k;
-
-    for (i = 0; i < nV; i++)
-        for (j = 0; j < nV; j++)
-            matrix[i][j] = graph[i][j];
-
-    // Adding vertices individually
-    for (k = 0; k < nV; k++)
+void floydWarshall(int* matrix, int n) {
+    for (int k = 0; k < n; k++)
     {
-        for (i = 0; i < nV; i++)
+        for (int i = 0; i < n; i++)
         {
-            for (j = 0; j < nV; j++)
+            for (int j = 0; j < n; j++)
             {
-                if (matrix[i][k] + matrix[k][j] < matrix[i][j])
-                    matrix[i][j] = matrix[i][k] + matrix[k][j];
+                if (matrix[i * n + k] + matrix[k * n + j] < matrix[i * n + j])
+                {
+                    matrix[i * n + j] = matrix[i * n + k] + matrix[k * n + j];
+                }
             }
         }
     }
-    printf("Result matrix is:\n");
-    printMatrix(matrix);
 }
 
-void printMatrix(int matrix[][nV]) {
-    int i, j;
-    for (i = 0; i < nV; i++)
+int* generateMatrix(int n) {
+    int* matrix = (int*)malloc(n * n * sizeof(int));
+    for (int i = 0; i < n; i++)
     {
-        for (j = 0; j < nV; j++)
+        for (int j = 0; j < n; j++)
         {
-            if (matrix[i][j] == INF)
+            if (i == j)
+                matrix[i * n + j] = 0;
+            else if (i == j - 1)
+                matrix[i * n + j] = 1;
+            else
+                matrix[i * n + j] = n + 1;
+        }
+    }
+    matrix[(n - 1) * n] = 1;
+    return matrix;
+}
+
+void printMatrix(int* matrix, int n) {
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (matrix[i * n + j] == n + 1)
                 printf("%4s", "INF");
             else
-                printf("%4d", matrix[i][j]);
+                printf("%4d", matrix[i * n + j]);
         }
         printf("\n");
     }
     printf("\n");
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     printf("|-----Floyd-Warshall algorithm-----|\n\n");
+    //    if (argc != 2)
+    //    {
+    //        printf("Usage: %s <matrix size>\n", argv[0]);
+    //        return 1;
+    //    }
+    //    int n = atoi(argv[1]);
+    int n = 4;
+    int* graph = generateMatrix(n);
 
-    int graph[nV][nV] = { { 0, 3, INF, 5 },
-        { 2, 0, INF, 4 },
-        { INF, 1, 0, INF },
-        { INF, INF, 2, 0 } };
     printf("Init matrix:\n");
-    printMatrix(graph);
+    printMatrix(graph, n);
 
-    floydWarshall(graph);
+    floydWarshall(graph, n);
+
+    printf("Result matrix is:\n");
+    printMatrix(graph, n);
+
+    //    free(graph);
+
     return 0;
 }

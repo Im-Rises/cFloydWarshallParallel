@@ -143,13 +143,25 @@ int main(int argc, char* argv[]) {
 
     // STEP 9: Configure work-item structure
     size_t globalWorkSize[2] = { n, n };
-    //    size_t localWorkSize[2] = { 10, 10 }; // TODO: change to something else
-    size_t localWorkSize[3] = { 1, 1, 1 };
-    clGetDeviceInfo(devices[0], CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(size_t) * 3, localWorkSize, NULL);
-    if (localWorkSize[0] > globalWorkSize[0])
-        localWorkSize[0] = globalWorkSize[0];
-    if (localWorkSize[1] > globalWorkSize[1])
-        localWorkSize[1] = globalWorkSize[1];
+    // V1:
+    size_t localWorkSize[2] = { 1, 1 }; // TODO: change to something else
+
+    // V2:
+    //    size_t localWorkSize[3] = { 1, 1, 1 };
+    //    clGetDeviceInfo(devices[0], CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(size_t) * 3, localWorkSize, NULL);
+    //    if (localWorkSize[0] > globalWorkSize[0])
+    //        localWorkSize[0] = globalWorkSize[0];
+    //    if (localWorkSize[1] > globalWorkSize[1])
+    //        localWorkSize[1] = globalWorkSize[1];
+
+    // V3:
+    //    size_t localWorkSize[3] = { 16, 16, 16 };
+    //    if (localWorkSize[0] > globalWorkSize[0])
+    //        localWorkSize[0] = globalWorkSize[0];
+    //    if (localWorkSize[1] > globalWorkSize[1])
+    //        localWorkSize[1] = globalWorkSize[1];
+
+
     printf("Global work size: %d\n", (int)globalWorkSize[0]);
     printf("Local work size: %d, %d\n\n", (int)localWorkSize[0], (int)localWorkSize[1]);
 
