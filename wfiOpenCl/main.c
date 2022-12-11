@@ -31,19 +31,38 @@ char* readProgramFile(const char* filename) {
     return source;
 }
 
-void printMatrix(int* matrix, int nV) {
-    int i, j;
-    for (i = 0; i < nV; i++)
+int* generateMatrix(int n) {
+    int* matrix = (int*)malloc(n * n * sizeof(int));
+    for (int i = 0; i < n; i++)
     {
-        for (j = 0; j < nV; j++)
+        for (int j = 0; j < n; j++)
         {
-            if (matrix[i * nV + j] == MAX_VALUE)
+            if (i == j)
+                matrix[i * n + j] = 0;
+            else if (i == j - 1)
+                matrix[i * n + j] = 1;
+            else
+                matrix[i * n + j] = MAX_VALUE;
+        }
+    }
+    matrix[(n - 1) * n] = 1;
+    return matrix;
+}
+
+void printMatrix(int* matrix, int n) {
+    int i, j;
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n; j++)
+        {
+            if (matrix[i * n + j] == MAX_VALUE)
                 printf("%4s", "INF");
             else
-                printf("%4d", matrix[i * nV + j]);
+                printf("%4d", matrix[i * n + j]);
         }
         printf("\n");
     }
+    printf("\n");
 }
 
 int main(int argc, char* argv[]) {
@@ -120,6 +139,10 @@ int main(int argc, char* argv[]) {
     kernel = clCreateKernel(program, programFunction, &status);
 
     //    // STEP 8: Create buffers
+
+    //    int* matrix = generateMatrix(4);
+    //    printMatrix(matrix, 4);
+
     //    int* A = (int*)malloc(n * n * sizeof(int));
     //    for (int i = 0; i < n; i++)
     //        for (int j = 0; j < n; j++)
@@ -137,27 +160,31 @@ int main(int argc, char* argv[]) {
     //          A[i * n + j] = n + 1;
 
     /* START DEBUG */
-    n = 4;
-    int* A = (int*)malloc(n * n * sizeof(int));
-    A[0 * n + 0] = 0;
-    A[0 * n + 1] = 3;
-    A[0 * n + 2] = MAX_VALUE;
-    A[0 * n + 3] = 5;
-    A[1 * n + 0] = 2;
-    A[1 * n + 1] = 0;
-    A[1 * n + 2] = MAX_VALUE;
-    A[1 * n + 3] = 4;
-    A[2 * n + 0] = MAX_VALUE;
-    A[2 * n + 1] = 1;
-    A[2 * n + 2] = 0;
-    A[2 * n + 3] = MAX_VALUE;
-    A[3 * n + 0] = MAX_VALUE;
-    A[3 * n + 1] = MAX_VALUE;
-    A[3 * n + 2] = 2;
-    A[3 * n + 3] = 0;
+    //    n = 4;
+    //    int* A = (int*)malloc(n * n * sizeof(int));
+    //    A[0 * n + 0] = 0;
+    //    A[0 * n + 1] = 3;
+    //    A[0 * n + 2] = MAX_VALUE;
+    //    A[0 * n + 3] = 5;
+    //    A[1 * n + 0] = 2;
+    //    A[1 * n + 1] = 0;
+    //    A[1 * n + 2] = MAX_VALUE;
+    //    A[1 * n + 3] = 4;
+    //    A[2 * n + 0] = MAX_VALUE;
+    //    A[2 * n + 1] = 1;
+    //    A[2 * n + 2] = 0;
+    //    A[2 * n + 3] = MAX_VALUE;
+    //    A[3 * n + 0] = MAX_VALUE;
+    //    A[3 * n + 1] = MAX_VALUE;
+    //    A[3 * n + 2] = 2;
+    //    A[3 * n + 3] = 0;
+    //    printf("Initial matrix:\n");
+    //    printMatrix(A, n);
+    /* END DEBUG */
+
+    int* A = generateMatrix(n);
     printf("Initial matrix:\n");
     printMatrix(A, n);
-    /* END DEBUG */
 
     cl_mem A_buf = clCreateBuffer(context, CL_MEM_READ_WRITE, n * n * sizeof(int), NULL, &status);
     status = clEnqueueWriteBuffer(cmdQueue, A_buf, CL_TRUE, 0, n * n * sizeof(int), A, 0, NULL, NULL);
