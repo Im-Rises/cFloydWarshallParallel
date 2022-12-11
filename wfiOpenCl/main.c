@@ -138,47 +138,44 @@ int main(int argc, char* argv[]) {
 
     // STEP 8: Create buffers
     int* A = generateMatrix(n);
-    printf("Initial matrix:\n");
-    printMatrix(A, n);
     cl_mem A_buf = clCreateBuffer(context, CL_MEM_READ_WRITE, n * n * sizeof(int), NULL, &status);
     status = clEnqueueWriteBuffer(cmdQueue, A_buf, CL_TRUE, 0, n * n * sizeof(int), A, 0, NULL, NULL);
 
     // STEP 9: Configure work-item structure
     size_t globalWorkSize[2] = { n, n };
-    size_t localWorkSize[2] = { 10, 10 }; // TODO: change to something else
+    //    size_t localWorkSize[2] = { 10, 10 }; // TODO: change to something else
+    size_t localWorkSize[3] = { 1, 1, 1 };
+    clGetDeviceInfo(devices[0], CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(size_t) * 3, localWorkSize, NULL);
+    if (localWorkSize[0] > globalWorkSize[0])
+        localWorkSize[0] = globalWorkSize[0];
+    if (localWorkSize[1] > globalWorkSize[1])
+        localWorkSize[1] = globalWorkSize[1];
+    printf("Global work size: %d\n", (int)globalWorkSize[0]);
+    printf("Local work size: %d, %d\n\n", (int)localWorkSize[0], (int)localWorkSize[1]);
 
-    //    size_t globalWorkSize[2] = { n, n };
-    //    size_t localWorkSize[3] = { 1, 1, 1 };
-    //    clGetDeviceInfo(devices[0], CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(size_t) * 3, localWorkSize, NULL);
-    //    printf("Global work size: %d\n", (int)globalWorkSize[0]);
-    //    printf("Local work size: %d, %d\n", (int)localWorkSize[0], (int)localWorkSize[1]);
+    // STEP 10: Print initial matrix
+    printf("Initial matrix:\n");
+    printMatrix(A, n);
 
-
-    // STEP 10: Set kernel arguments
+    // STEP 11: Set kernel arguments
     status = clSetKernelArg(kernel, 0, sizeof(cl_mem), &A_buf);
     status = clSetKernelArg(kernel, 2, sizeof(cl_int), &n);
 
-    // STEP 11: Enqueue kernel for execution and execute for each k = 0, 1, ..., n - 1
+    // STEP 12: Enqueue kernel for execution and execute for each k = 0, 1, ..., n - 1
     for (int k = 0; k < n; k++)
     {
         status = clSetKernelArg(kernel, 1, sizeof(int), &k);
         status = clEnqueueNDRangeKernel(cmdQueue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
     }
 
-    // STEP 12: Read the output buffer back to the host
+    // STEP 13: Read the output buffer back to the host
     status = clEnqueueReadBuffer(cmdQueue, A_buf, CL_TRUE, 0, n * n * sizeof(int), A, 0, NULL, NULL);
 
-    // STEP 13: Display the result
+    // STEP 14: Display the result
     printf("Result:\n");
-    //    for (int i = 0; i < n; i++)
-    //    {
-    //        for (int j = 0; j < n; j++)
-    //            printf("%04d ", A[i * n + j]);
-    //        printf("\n");
-    //    }
     printMatrix(A, n);
 
-    // STEP 14: Release OpenCL resources
+    // STEP 15: Release OpenCL resources
     clReleaseKernel(kernel);
     clReleaseProgram(program);
     clReleaseCommandQueue(cmdQueue);
