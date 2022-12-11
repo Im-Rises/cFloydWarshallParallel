@@ -67,6 +67,8 @@ void printMatrix(int* matrix, int n) {
 }
 
 int main(int argc, char* argv[]) {
+    int* matrix = generateMatrix(4);
+    printMatrix(matrix, 4);
     printf("|-----Floyd-Warshall parallel OpenCL algorithm-----|\n\n");
 
     // Check the command line arguments
