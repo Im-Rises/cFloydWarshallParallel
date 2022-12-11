@@ -140,13 +140,19 @@ int main(int argc, char* argv[]) {
     int* A = generateMatrix(n);
     printf("Initial matrix:\n");
     printMatrix(A, n);
-
     cl_mem A_buf = clCreateBuffer(context, CL_MEM_READ_WRITE, n * n * sizeof(int), NULL, &status);
     status = clEnqueueWriteBuffer(cmdQueue, A_buf, CL_TRUE, 0, n * n * sizeof(int), A, 0, NULL, NULL);
 
     // STEP 9: Configure work-item structure
     size_t globalWorkSize[2] = { n, n };
-    size_t localWorkSize[2] = { 1, 1 }; // TODO: change to something else
+    size_t localWorkSize[2] = { 10, 10 }; // TODO: change to something else
+
+    //    size_t globalWorkSize[2] = { n, n };
+    //    size_t localWorkSize[3] = { 1, 1, 1 };
+    //    clGetDeviceInfo(devices[0], CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(size_t) * 3, localWorkSize, NULL);
+    //    printf("Global work size: %d\n", (int)globalWorkSize[0]);
+    //    printf("Local work size: %d, %d\n", (int)localWorkSize[0], (int)localWorkSize[1]);
+
 
     // STEP 10: Set kernel arguments
     status = clSetKernelArg(kernel, 0, sizeof(cl_mem), &A_buf);
