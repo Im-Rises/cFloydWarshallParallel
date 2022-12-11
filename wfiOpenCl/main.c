@@ -31,19 +31,39 @@ char* readProgramFile(const char* filename) {
     return source;
 }
 
-void printMatrix(int* matrix, int nV) {
-    int i, j;
-    for (i = 0; i < nV; i++)
+int* generateMatrix(int n) {
+    int* matrix = (int*)malloc(n * n * sizeof(int));
+    for (int i = 0; i < n; i++)
     {
-        for (j = 0; j < nV; j++)
+        for (int j = 0; j < n; j++)
         {
-            if (matrix[i * nV + j] == MAX_VALUE)
+            if (i == j)
+                matrix[i * n + j] = 0;
+            else if (i == j - 1)
+                matrix[i * n + j] = 1;
+            else
+                matrix[i * n + j] = MAX_VALUE;
+        }
+    }
+    matrix[(n - 1) * n] = 1;
+
+    return matrix;
+}
+
+void printMatrix(int* matrix, int n) {
+    int i, j;
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n; j++)
+        {
+            if (matrix[i * n + j] == MAX_VALUE)
                 printf("%4s", "INF");
             else
-                printf("%4d", matrix[i * nV + j]);
+                printf("%4d", matrix[i * n + j]);
         }
         printf("\n");
     }
+    printf("\n");
 }
 
 int main(int argc, char* argv[]) {
