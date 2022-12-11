@@ -8,8 +8,6 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
-#define MAX_VALUE 9999
-
 char* readProgramFile(const char* filename) {
     FILE* fp;
     char* source;
@@ -42,7 +40,7 @@ int* generateMatrix(int n) {
             else if (i == j - 1)
                 matrix[i * n + j] = 1;
             else
-                matrix[i * n + j] = MAX_VALUE;
+                matrix[i * n + j] = n + 1;
         }
     }
     matrix[(n - 1) * n] = 1;
@@ -55,7 +53,7 @@ void printMatrix(int* matrix, int n) {
     {
         for (j = 0; j < n; j++)
         {
-            if (matrix[i * n + j] == MAX_VALUE)
+            if (matrix[i * n + j] == n + 1)
                 printf("%4s", "INF");
             else
                 printf("%4d", matrix[i * n + j]);
