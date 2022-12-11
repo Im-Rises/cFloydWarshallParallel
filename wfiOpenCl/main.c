@@ -136,50 +136,7 @@ int main(int argc, char* argv[]) {
     // STEP 7: Create kernel object
     kernel = clCreateKernel(program, programFunction, &status);
 
-    //    // STEP 8: Create buffers
-
-    //    int* matrix = generateMatrix(4);
-    //    printMatrix(matrix, 4);
-
-    //    int* A = (int*)malloc(n * n * sizeof(int));
-    //    for (int i = 0; i < n; i++)
-    //        for (int j = 0; j < n; j++)
-    //            A[i * n + j] = 0;
-    //    A[0 * n + 1] = 1;
-    //    A[0 * n + 2] = 2;
-    //    A[0 * n + 3] = 3;
-    //    A[1 * n + 2] = 4;
-    //    A[1 * n + 3] = 5;
-    //    A[2 * n + 3] = 6;
-    //    for (int i = 0; i < n; i++)
-    //        for (int j = 0; j < n; j++)
-    //            if (i != j && A[i * n + j] == 0)
-    //                A[i * n + j] = MAX_VALUE;
-    //          A[i * n + j] = n + 1;
-
-    /* START DEBUG */
-    //    n = 4;
-    //    int* A = (int*)malloc(n * n * sizeof(int));
-    //    A[0 * n + 0] = 0;
-    //    A[0 * n + 1] = 3;
-    //    A[0 * n + 2] = MAX_VALUE;
-    //    A[0 * n + 3] = 5;
-    //    A[1 * n + 0] = 2;
-    //    A[1 * n + 1] = 0;
-    //    A[1 * n + 2] = MAX_VALUE;
-    //    A[1 * n + 3] = 4;
-    //    A[2 * n + 0] = MAX_VALUE;
-    //    A[2 * n + 1] = 1;
-    //    A[2 * n + 2] = 0;
-    //    A[2 * n + 3] = MAX_VALUE;
-    //    A[3 * n + 0] = MAX_VALUE;
-    //    A[3 * n + 1] = MAX_VALUE;
-    //    A[3 * n + 2] = 2;
-    //    A[3 * n + 3] = 0;
-    //    printf("Initial matrix:\n");
-    //    printMatrix(A, n);
-    /* END DEBUG */
-
+    // STEP 8: Create buffers
     int* A = generateMatrix(n);
     printf("Initial matrix:\n");
     printMatrix(A, n);
