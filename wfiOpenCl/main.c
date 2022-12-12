@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 
+#define PRINT_MATRIX_THRESHOLD 30
+
 char* readProgramFile(const char* filename) {
     FILE* fp;
     char* source;
@@ -47,18 +49,49 @@ int* generateMatrix(int n) {
     return matrix;
 }
 
+int countDigit(long long n) {
+    if (n / 10 == 0)
+        return 1;
+    return 1 + countDigit(n / 10);
+}
+
 void printMatrix(int* matrix, int n) {
-    int i, j;
-    for (i = 0; i < n; i++)
+    if (n > PRINT_MATRIX_THRESHOLD)
     {
-        for (j = 0; j < n; j++)
+        printf("Matrix is too large to printed completely.\n");
+        printf("- First row: ");
+        for (int i = 0; i < n; i++)
         {
-            if (matrix[i * n + j] == n + 1)
-                printf("%4s", "INF");
+            if (matrix[i] == n + 1)
+                printf("%*s ", countDigit(n + 1), "INF");
             else
-                printf("%4d", matrix[i * n + j]);
+                printf("%*d ", countDigit(n + 1), matrix[i]);
         }
         printf("\n");
+
+        printf("- Last row: ");
+        for (int i = (n - 1) * n; i < n * n; i++)
+        {
+            if (matrix[i] == n + 1)
+                printf("%*s ", countDigit(n + 1), "INF");
+            else
+                printf("%*d ", countDigit(n + 1), matrix[i]);
+        }
+        printf("\n");
+    }
+    else
+    {
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (matrix[i * n + j] == n + 1)
+                    printf("%4s", "INF");
+                else
+                    printf("%4d", matrix[i * n + j]);
+            }
+            printf("\n");
+        }
     }
     printf("\n");
 }
@@ -103,7 +136,7 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < numDevices; i++)
     {
         clGetDeviceInfo(devices[i], CL_DEVICE_NAME, sizeof(platformName), platformName, NULL);
-        printf("Name of device %d: %s\n\n", i, platformName);
+        printf("Name of device %d: %s\n", i, platformName);
     }
 
     // STEP 3: Create a context
@@ -143,27 +176,7 @@ int main(int argc, char* argv[]) {
 
     // STEP 9: Configure work-item structure
     size_t globalWorkSize[2] = { n, n };
-    // V1:
-    //    size_t localWorkSize[2] = { 4, 4 };
-
-    // V2:
-    //    size_t localWorkSize[3] = { 1, 1, 1 };
-    //    clGetDeviceInfo(devices[0], CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(size_t) * 3, localWorkSize, NULL);
-    //    if (localWorkSize[0] > globalWorkSize[0])
-    //        localWorkSize[0] = globalWorkSize[0];
-    //    if (localWorkSize[1] > globalWorkSize[1])
-    //        localWorkSize[1] = globalWorkSize[1];
-
-    // V3:
-    //    size_t localWorkSize[3] = { 16, 16, 16 };
-    //    if (localWorkSize[0] > globalWorkSize[0])
-    //        localWorkSize[0] = globalWorkSize[0];
-    //    if (localWorkSize[1] > globalWorkSize[1])
-    //        localWorkSize[1] = globalWorkSize[1];
-
-
-    printf("Global work size: %d, %d\n", (int)globalWorkSize[0], (int)globalWorkSize[1]);
-    //    printf("Local work size: %d, %d\n\n", (int)localWorkSize[0], (int)localWorkSize[1]);
+    printf("Global work size: %d, %d\n\n", (int)globalWorkSize[0], (int)globalWorkSize[1]);
 
     // STEP 10: Print initial matrix
     printf("Initial matrix:\n");
