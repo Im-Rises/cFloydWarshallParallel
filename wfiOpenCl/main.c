@@ -55,6 +55,17 @@ int countDigit(long long n) {
     return 1 + countDigit(n / 10);
 }
 
+// void printMatrixLine(int* matrix, int n, int i) {
+//     for (int j = 0; j < n; j++)
+//     {
+//         if (matrix[i * n + j] == n + 1)
+//             printf("%*s ", countDigit(n + 1), "INF");
+//         else
+//             printf("%*d ", countDigit(n + 1), matrix[i * n + j]);
+//     }
+//     printf("\n");
+// }
+
 void printMatrix(int* matrix, int n) {
     if (n > PRINT_MATRIX_THRESHOLD)
     {
@@ -86,9 +97,9 @@ void printMatrix(int* matrix, int n) {
             for (int j = 0; j < n; j++)
             {
                 if (matrix[i * n + j] == n + 1)
-                    printf("%4s", "INF");
+                    printf("%*s ", countDigit(n + 1), "INF");
                 else
-                    printf("%4d", matrix[i * n + j]);
+                    printf("%*d ", countDigit(n + 1), matrix[i * n + j]);
             }
             printf("\n");
         }
@@ -100,12 +111,16 @@ int main(int argc, char* argv[]) {
     printf("|-----Floyd-Warshall parallel OpenCL algorithm-----|\n\n");
 
     // Check the command line arguments
-    if (argc != 2)
-    {
-        printf("Usage: %s <n value>\n", argv[0]);
-        return 1;
-    }
-    cl_int n = atoi(argv[1]);
+    //    if (argc != 2)
+    //    {
+    //        printf("Usage: %s <n value>\n", argv[0]);
+    //        return 1;
+    //    }
+    //    cl_int n = atoi(argv[1]);
+
+    // Read from command line
+    cl_int n = 10;
+    scanf("%d", &n);
 
     // STEP 0: Init variables
     char* programSourceFilename = "data/program.cl";
