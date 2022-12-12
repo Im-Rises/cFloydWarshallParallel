@@ -144,7 +144,7 @@ int main(int argc, char* argv[]) {
     // STEP 9: Configure work-item structure
     size_t globalWorkSize[2] = { n, n };
     // V1:
-    size_t localWorkSize[2] = { 1, 1 }; // TODO: change to something else
+    //    size_t localWorkSize[2] = { 4, 4 };
 
     // V2:
     //    size_t localWorkSize[3] = { 1, 1, 1 };
@@ -162,8 +162,8 @@ int main(int argc, char* argv[]) {
     //        localWorkSize[1] = globalWorkSize[1];
 
 
-    printf("Global work size: %d\n", (int)globalWorkSize[0]);
-    printf("Local work size: %d, %d\n\n", (int)localWorkSize[0], (int)localWorkSize[1]);
+    printf("Global work size: %d, %d\n", (int)globalWorkSize[0], (int)globalWorkSize[1]);
+    //    printf("Local work size: %d, %d\n\n", (int)localWorkSize[0], (int)localWorkSize[1]);
 
     // STEP 10: Print initial matrix
     printf("Initial matrix:\n");
@@ -177,7 +177,7 @@ int main(int argc, char* argv[]) {
     for (int k = 0; k < n; k++)
     {
         status = clSetKernelArg(kernel, 1, sizeof(int), &k);
-        status = clEnqueueNDRangeKernel(cmdQueue, kernel, 2, NULL, globalWorkSize, localWorkSize, 0, NULL, NULL);
+        status = clEnqueueNDRangeKernel(cmdQueue, kernel, 2, NULL, globalWorkSize, NULL, 0, NULL, NULL);
     }
 
     // STEP 13: Read the output buffer back to the host

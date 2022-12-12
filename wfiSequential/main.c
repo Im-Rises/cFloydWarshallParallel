@@ -52,13 +52,12 @@ void printMatrix(int* matrix, int n) {
 
 int main(int argc, char* argv[]) {
     printf("|-----Floyd-Warshall algorithm-----|\n\n");
-    //    if (argc != 2)
-    //    {
-    //        printf("Usage: %s <matrix size>\n", argv[0]);
-    //        return 1;
-    //    }
-    //    int n = atoi(argv[1]);
-    int n = 4;
+    if (argc != 2)
+    {
+        printf("Usage: %s <matrix size>\n", argv[0]);
+        return 1;
+    }
+    int n = atoi(argv[1]);
     int* graph = generateMatrix(n);
 
     printf("Init matrix:\n");
