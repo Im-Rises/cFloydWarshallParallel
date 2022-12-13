@@ -128,3 +128,15 @@ void printMatrix(int* matrix, int n) {
     }
     printf("\n");
 }
+
+int checkMatricesEquality(const int* matrix1, const int* matrix2, int n) {
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            if (matrix1[i * n + j] != matrix2[i * n + j])
+                return 0;
+        }
+    }
+    return 1;
+}

@@ -4,25 +4,13 @@
 #include "../common/commonFunctions.h"
 #include "../wfiSequential/wfiSequential.h"
 
-int checkMatrix(const int* matrix1, const int* matrix2, int n) {
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            if (matrix1[i * n + j] != matrix2[i * n + j])
-                return 0;
-        }
-    }
-    return 1;
-}
-
 int testFloydWarshall(const int n, const int errorCode) {
     int* matrix = generateTestMatrix(n);
     int* outputTestMatrix = generateOutputTestMatrix(n);
     floydWarshall(matrix, n);
     //    printMatrix(matrix, n);
     //    printMatrix(outputTestMatrix, n);
-    int matricesEquality = checkMatrix(matrix, outputTestMatrix, n);
+    int matricesEquality = checkMatricesEquality(matrix, outputTestMatrix, n);
     free(matrix);
     free(outputTestMatrix);
     if (!matricesEquality)
