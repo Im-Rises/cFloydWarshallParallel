@@ -55,17 +55,6 @@ int countDigit(long long n) {
     return 1 + countDigit(n / 10);
 }
 
-// void printMatrixLine(int* matrix, int n, int i) {
-//     for (int j = 0; j < n; j++)
-//     {
-//         if (matrix[i * n + j] == n + 1)
-//             printf("%*s ", countDigit(n + 1), "INF");
-//         else
-//             printf("%*d ", countDigit(n + 1), matrix[i * n + j]);
-//     }
-//     printf("\n");
-// }
-
 void printMatrix(int* matrix, int n) {
     if (n > PRINT_MATRIX_THRESHOLD)
     {
