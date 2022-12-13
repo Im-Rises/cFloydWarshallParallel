@@ -1,9 +1,53 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "../common/commonFunctions.h"
 #include "../wfiSequential/wfiSequential.h"
 
-int checkMatrix(int* matrix1, int* matrix2, int n) {
+int* generateOutputTestMatrix(const int n) {
+    int* matrix = malloc(n * n * sizeof(int));
+
+    // Fill the beginning
+    for (int i = 0; i < n; i++)
+    {
+        int value = 0;
+        for (int j = 0; j < n; j++)
+        {
+            if (i == j)
+            {
+                matrix[i * n + j] = 0;
+                value = 1;
+            }
+            else
+            {
+                matrix[i * n + j] = value++;
+            }
+        }
+    }
+
+    // Fill the rest
+    for (int j = 0; j < n; j++)
+    {
+        int value = n - 1;
+        int hasReachedZero = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (i == j)
+            {
+                matrix[i * n + j] = 0;
+                value = n - 1;
+                hasReachedZero = 1;
+            }
+            else if (hasReachedZero)
+            {
+                matrix[i * n + j] = value--;
+            }
+        }
+    }
+    return matrix;
+}
+
+int checkMatrix(const int* matrix1, const int* matrix2, int n) {
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
@@ -15,21 +59,41 @@ int checkMatrix(int* matrix1, int* matrix2, int n) {
     return 1;
 }
 
-int testFloydWarshall() {
-    int errorCode = 0;
-    int n = 10;
-    int* graph = generateMatrix(n);
-    floydWarshall(graph, n);
-    if (checkMatrix(graph, graph, n))
+int testFloydWarshall(const int n, const int errorCode) {
+    int* matrix = generateMatrix(n);
+    int* outputTestMatrix = generateOutputTestMatrix(n);
+    floydWarshall(matrix, n);
+    //    printMatrix(matrix, n);
+    //    printMatrix(outputTestMatrix, n);
+    int matricesEquality = checkMatrix(matrix, outputTestMatrix, n);
+    free(matrix);
+    free(outputTestMatrix);
+    if (!matricesEquality)
     {
-        errorCode = 1;
+        printf("- WFI for n = %d, fail!\n", n);
+        return errorCode;
     }
 
-    free(graph);
-    return errorCode;
+    printf("- WFI for n = %d, pass!\n", n);
+    return 0;
 }
 
 int main(int argc, char* argv[]) {
-    testFloydWarshall();
-    return 0;
+    printf("WFI Sequential Test:\n");
+    int errorCode = 0;
+    errorCode += testFloydWarshall(10, 1);
+    errorCode += testFloydWarshall(100, 2);
+    errorCode += testFloydWarshall(1000, 4);
+
+    if (errorCode == 0)
+    {
+        printf("All tests passed!\n");
+    }
+    else
+    {
+        printf("Some tests failed!\n");
+        printf("Error code: %d : 0X%02X\n", errorCode, errorCode);
+    }
+
+    return errorCode;
 }
