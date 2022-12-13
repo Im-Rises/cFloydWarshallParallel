@@ -1,8 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <time.h>
+//#include "../common/commonFunctions.h"
+//#include "../wfiSequential/wfiOpenCl.h"
 
-int main() {
+int main(int argc, char* argv[]) {
     return 0;
 }
