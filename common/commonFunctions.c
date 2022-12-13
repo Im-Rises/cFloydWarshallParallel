@@ -5,7 +5,14 @@
 
 #define PRINT_MATRIX_THRESHOLD 30
 
-int* generateMatrix(int n) {
+int* generateTestMatrix(int n) {
+    /*
+     * Generate a test matrix looks like this (for n = 4):
+     * 0  1  3  4
+     * 1  0  2  3
+     * 3  2  0  1
+     * 4  3  1  0
+     */
     int* matrix = (int*)malloc(n * n * sizeof(int));
     for (int i = 0; i < n; i++)
     {
@@ -20,6 +27,56 @@ int* generateMatrix(int n) {
         }
     }
     matrix[(n - 1) * n] = 1;
+    return matrix;
+}
+
+int* generateOutputTestMatrix(const int n) {
+    /*
+     * Create a matrix looks like this (for n = 4):
+     * 0  1  2  3
+     * 1  0  1  2
+     * 2  1  0  1
+     * 3  2  1  0
+     */
+    int* matrix = malloc(n * n * sizeof(int));
+
+    // Fill the beginning
+    for (int i = 0; i < n; i++)
+    {
+        int value = 0;
+        for (int j = 0; j < n; j++)
+        {
+            if (i == j)
+            {
+                matrix[i * n + j] = 0;
+                value = 1;
+            }
+            else
+            {
+                matrix[i * n + j] = value++;
+            }
+        }
+    }
+
+    // Fill the rest
+    for (int j = 0; j < n; j++)
+    {
+        int value = n - 1;
+        int hasReachedZero = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (i == j)
+            {
+                matrix[i * n + j] = 0;
+                value = n - 1;
+                hasReachedZero = 1;
+            }
+            else if (hasReachedZero)
+            {
+                matrix[i * n + j] = value--;
+            }
+        }
+    }
     return matrix;
 }
 

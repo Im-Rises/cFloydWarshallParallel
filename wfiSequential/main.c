@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     int n = 10;
     scanf("%d", &n);
 
-    int* graph = generateMatrix(n);
+    int* graph = generateTestMatrix(n);
 
     printf("Init matrix:\n");
     printMatrix(graph, n);

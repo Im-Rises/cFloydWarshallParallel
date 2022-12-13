@@ -31,7 +31,7 @@ char* readProgramFile(const char* filename) {
     return source;
 }
 
-int* generateMatrix(int n) {
+int* generateTestMatrix(int n) {
     int* matrix = (int*)malloc(n * n * sizeof(int));
     for (int i = 0; i < n; i++)
     {
@@ -174,7 +174,7 @@ int main(int argc, char* argv[]) {
     kernel = clCreateKernel(program, programFunction, &status);
 
     // STEP 8: Create buffers
-    int* A = generateMatrix(n);
+    int* A = generateTestMatrix(n);
     cl_mem A_buf = clCreateBuffer(context, CL_MEM_READ_WRITE, n * n * sizeof(int), NULL, &status);
     status = clEnqueueWriteBuffer(cmdQueue, A_buf, CL_TRUE, 0, n * n * sizeof(int), A, 0, NULL, NULL);
 

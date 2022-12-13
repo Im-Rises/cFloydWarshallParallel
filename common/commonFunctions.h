@@ -1,7 +1,8 @@
 #ifndef COMMONFUNCTIONS_H
 #define COMMONFUNCTIONS_H
 
-int* generateMatrix(int n);
+int* generateTestMatrix(int n);
+int* generateOutputTestMatrix(const int n);
 int countDigit(long long n);
 void printMatrix(int* matrix, int n);
 
