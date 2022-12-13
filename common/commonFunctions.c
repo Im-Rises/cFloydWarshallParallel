@@ -8,10 +8,12 @@
 int* generateTestMatrix(int n) {
     /*
      * Generate a test matrix looks like this (for n = 4):
-     * 0  1  3  4
-     * 1  0  2  3
-     * 3  2  0  1
-     * 4  3  1  0
+     *   0    1  n+1  n+1
+     * n+1    0    1  n+1
+     * n+1  n+1    0    1
+     *   1  n+1  n+1    0
+     *
+     *   n+1 aka INF (infinity)
      */
     int* matrix = (int*)malloc(n * n * sizeof(int));
     for (int i = 0; i < n; i++)
@@ -32,7 +34,7 @@ int* generateTestMatrix(int n) {
 
 int* generateOutputTestMatrix(const int n) {
     /*
-     * Create a matrix looks like this (for n = 4):
+     * Create the output matrix from the matrix generated in the function above (generateTestMatrix).
      * 0  1  2  3
      * 1  0  1  2
      * 2  1  0  1
