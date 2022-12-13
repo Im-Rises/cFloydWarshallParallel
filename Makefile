@@ -5,10 +5,13 @@ all:
 	$(MAKE) clean
 
 wfiSeq:
-	gcc -o buildMakeFile/wfiSequential wfiSequential/main.c -std=c17 -Wall #-Wextra -Werror -pedantic
+	gcc ./wfiSequential/main.c -o buildMakeFile/main.o -c -std=c17 -Wall -O2
+	gcc ./wfiSequential/wfiSequential.c -o buildMakeFile/wfiSequential.o -c -std=c17 -Wall -O2
+	gcc ./common/commonFunctions.c -o buildMakeFile/commonFunctions.o -c -std=c17 -Wall -O2
+	gcc -o buildMakeFile/wfiSequential buildMakeFile/main.o buildMakeFile/wfiSequential.o  buildMakeFile/commonFunctions.o -std=c17 -Wall -O2
 
 wfiPar:
-	gcc -o buildMakeFile/wfiOpenCl wfiOpenCl/main.c -lOpenCL -std=c17 -Wall #-Wextra -Werror -pedantic
+	gcc -o buildMakeFile/wfiOpenCl wfiOpenCl/main.c -lOpenCL -std=c17 -Wall -O2  #-Wextra -Werror -pedantic
 
 MrProper : clean
 	rm -f buildMakeFile/primeNumberFinderSequential
