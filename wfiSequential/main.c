@@ -1,66 +1,34 @@
-// Floyd-Warshall Algorithm in C
-
-// https://www.geeksforgeeks.org/floyd-warshall-algorithm-dp-16/
-
 #include <stdio.h>
+#include <stdlib.h>
 
-// defining the number of vertices
-#define nV 4
+#include "../common/commonFunctions.h"
+#include "wfiSequential.h"
 
-#define INF 999
-
-void printMatrix(int matrix[][nV]);
-
-// Implementing floyd warshall algorithm
-void floydWarshall(int graph[][nV]) {
-    int matrix[nV][nV], i, j, k;
-
-    for (i = 0; i < nV; i++)
-        for (j = 0; j < nV; j++)
-            matrix[i][j] = graph[i][j];
-
-    // Adding vertices individually
-    for (k = 0; k < nV; k++)
-    {
-        for (i = 0; i < nV; i++)
-        {
-            for (j = 0; j < nV; j++)
-            {
-                if (matrix[i][k] + matrix[k][j] < matrix[i][j])
-                    matrix[i][j] = matrix[i][k] + matrix[k][j];
-            }
-        }
-    }
-    printf("Result matrix is:\n");
-    printMatrix(matrix);
-}
-
-void printMatrix(int matrix[][nV]) {
-    int i, j;
-    for (i = 0; i < nV; i++)
-    {
-        for (j = 0; j < nV; j++)
-        {
-            if (matrix[i][j] == INF)
-                printf("%4s", "INF");
-            else
-                printf("%4d", matrix[i][j]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-}
-
-int main() {
+int main(int argc, char* argv[]) {
     printf("|-----Floyd-Warshall algorithm-----|\n\n");
+    // Check the command line arguments
+    //    if (argc != 2)
+    //    {
+    //        printf("Usage: %s <n value>\n", argv[0]);
+    //        return 1;
+    //    }
+    //    cl_int n = atoi(argv[1]);
 
-    int graph[nV][nV] = { { 0, 3, INF, 5 },
-        { 2, 0, INF, 4 },
-        { INF, 1, 0, INF },
-        { INF, INF, 2, 0 } };
+    // Read from command line
+    int n = 10;
+    scanf("%d", &n);
+
+    int* graph = generateTestMatrix(n);
+
     printf("Init matrix:\n");
-    printMatrix(graph);
+    printMatrix(graph, n);
 
-    floydWarshall(graph);
+    floydWarshall(graph, n);
+
+    printf("Result matrix is:\n");
+    printMatrix(graph, n);
+
+    free(graph);
+
     return 0;
 }
