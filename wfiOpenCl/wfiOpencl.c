@@ -1,6 +1,7 @@
 #include "wfiOpencl.h"
 
-{
+
+char* readProgramFile(const char* filename) {
     FILE* fp;
     char* source;
     int sz = 0;
