@@ -1,7 +1,7 @@
 set(SRCS_TEST "wfiOpenClTest.c" "wfiSequentialTest.c")
 
 set(HDRS "../common/commonFunctions.h" "../wfiSequential/wfiSequential.h")
-set(SRCS "../common/commonFunctions.c" "../wfiSequential/wfiSequential.C")
+set(SRCS "../common/commonFunctions.c" "../wfiSequential/wfiSequential.c")
 
 enable_testing()
 
