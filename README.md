@@ -14,28 +14,28 @@ The algorithm is implemented in C and the OpenCL kernel is written in OpenCL C. 
 
 ## Algorithm
 
-<!--
-The algorithm is implemented using the following steps:
-1. Read the input file and store the graph in a matrix
-2. Create a buffer for the graph matrix and copy the graph matrix to the buffer
-3. Create a buffer for the result matrix and copy the graph matrix to the result buffer
-4. Create a kernel and set the arguments
-5. Execute the kernel
-6. Read the result matrix from the result buffer
-7. Print the result matrix
-8. Free the memory
-9. Exit
-10. PROFIT!
-11. (Optional) Write the result matrix to a file
-12. (Optional) Print the execution time
-13. (Optional) Print the execution time for each kernel execution
-14. (Optional) Print the execution time for each kernel execution and the total execution time
-15. (Optional) Print the execution time for each kernel execution and the total execution time and write the result matrix to a file
--->
+The Floyd-Warshall algorithm is an algorithm for finding the shortest paths between all pairs of vertices in a weighted
+graph. The algorithm is based on the idea of dynamic programming. The algorithm is implemented in a parallel way using
+OpenCL.
 
-## Algorithm
+### Sequential algorithm
 
-PLACEHOLDER
+```algorithm
+for k from 1 to n
+    for i from 1 to n
+        for j from 1 to n
+            if dist[i][j] > dist[i][k] + dist[k][j]
+                dist[i][j] = dist[i][k] + dist[k][j]
+```
+
+### Parallel OpenCL algorithm
+
+```algorithm
+for k from 1 to n
+    All threads in the work group with i = get_global_id(0) and j = get_global_id(1)
+        if dist[i][j] > dist[i][k] + dist[k][j]
+        dist[i][j] = dist[i][k] + dist[k][j]
+```
 
 ## Results
 
@@ -43,57 +43,11 @@ The results of the programs are shown in the following table:
 
 ### Prime Number Algorithm
 
-| Number of processes | Time (s) |
-|---------------------|----------|
-| 1                   | 0.000    |
-| 2                   | 0.000    |
-| 4                   | 0.000    |
-| 8                   | 0.000    |
-| 16                  | 0.000    |
-| 32                  | 0.000    |
-| 64                  | 0.000    |
-| 128                 | 0.000    |
-
-<details>
-<summary>Click to see the detailed results</summary>
-| Number of processes | Time (s) |
-| ------------------- | -------- |
-| 1                   | 0.000    |
-| 2                   | 0.000    |
-| 4                   | 0.000    |
-| 8                   | 0.000    |
-| 16                  | 0.000    |
-| 32                  | 0.000    |
-| 64                  | 0.000    |
-| 128                 | 0.000    |
-</details>
-
-### Twin Prime Number Algorithm
-
-| Number of processes | Time (s) |
-|---------------------|----------|
-| 1                   | 0.000    |
-| 2                   | 0.000    |
-| 4                   | 0.000    |
-| 8                   | 0.000    |
-| 16                  | 0.000    |
-| 32                  | 0.000    |
-| 64                  | 0.000    |
-| 128                 | 0.000    |
-
-<details>
-<summary>Click to see the detailed results</summary>
-| Number of processes | Time (s) |
-| ------------------- | -------- |
-| 1                   | 0.000    |
-| 2                   | 0.000    |
-| 4                   | 0.000    |
-| 8                   | 0.000    |
-| 16                  | 0.000    |
-| 32                  | 0.000    |
-| 64                  | 0.000    |
-| 128                 | 0.000    |
-</details>
+| Number of vertices (n) | Sequential Time (s) | Parallel OpenCL Time (s) |
+|------------------------|---------------------|--------------------------|
+| 100                    | 0.000000            | 0.000000                 |
+| 1000                   | 0.000000            | 0.000000                 |
+| 10000                  | 0.000000            | 0.000000                 |
 
 ## Quick Start
 
@@ -102,54 +56,50 @@ PLACEHOLDER
 ## Project Architecture
 
 ~~~
-ParticleEngine
+cFloydWarshallParallel
 ├── .github
-|  ├── labels.yml
-|  ├── release.yml
 │  ├── workflows
+│  │   |── c-cpp.yml
 │  │   |── cmake.yml
 │  │   |── codeql.yml
-│  │   |── cpp-cmake-publish.yml
 │  │   |── cpp-linter.yml
 │  │   |── dependency-review.yml
 │  │   |── flawfinder.yml
 │  │   |── greetings.yml
 │  │   |── label.yml
-│  │   |── msvc.yml
 │  │   |── stale.yml
-├── dependencies
-|  ├── glad
-|  ├── glfw
-|  ├── glfwglm
-|  ├── imgui
-|  ├── stb
-├── ParticleEngine
-│  │   |── *
-|  ├── Particle
-│  │   |── *
-|  ├── Scene
-│  │   |── *
-|  ├── CMakeLists.txt
-|  ├── InputManager.cpp
-|  ├── InputManager.h
-|  ├── main.cpp
-|  ├── ParticleEngine.cpp
-|  ├── ParticleEngine.h
+|  ├── labels.yml
+|  ├── release.yml
+├── buildMakeFile
+│  ├── placeholder
+├── common
+|  ├── commonFunctions.c
+|  ├── commonFunctions.h
+├── data
+|  ├── program.cl
 ├── test
-|  ├── TestParticle
-│  │   |── *
+|  ├── CMakelists.txt
+|  ├── wfiOpenCLTest.c
+|  ├── wfiSequentialTest.c
+├── wfiOpenCL
 |  ├── CMakeLists.txt
-|  ├── integratorTest.cpp
-|  ├── physicHandlerTest.cpp
-|  ├── particleTest.cpp
+|  ├── main
+|  ├── wfiOpenCL.c
+|  ├── wfiOpenCL.h
+├── wfiSequential
+|  ├── CMakeLists.txt
+|  ├── main
+|  ├── wfiSequential.c
+|  ├── wfiSequential.h
 ├── .clang-format
+├── .clang-tidy
 ├── .editorconfig
 ├── .gitattributes
 ├── .gitignore
 ├── CMakelists.txt
 ├── CMakePresets.json
 ├── CMakeSettings.json
-├── imgui.ini
+├── Makefile
 ├── README.md
 ~~~
 
@@ -167,11 +117,26 @@ The makefile is for the GNU compiler collection (GCC) and the CMakelists.txt fil
 
 ### Makefile build
 
-PLACEHOLDER
+To compile the program using the makefile, you can use the following commands:
+
+```bash
+make
+```
+
+You can also compile separately the sequential and parallel programs:
+
+```bash
+make wfiSeq
+make wfiPar
+```
 
 ### CMake build
 
-PLACEHOLDER
+To compile the program using CMake, you can use the following commands:
+
+```bash
+cmake -B . -DCMAKE_BUILD_TYPE=Release
+```
 
 ## GitHub Actions
 
@@ -203,6 +168,9 @@ programiz:
 
 geekeforgeeks:  
 <https://www.geeksforgeeks.org/floyd-warshall-algorithm-dp-16/>
+
+moorejs:  
+<https://moorejs.github.io/APSP-in-parallel/>
 
 ## Contributors
 

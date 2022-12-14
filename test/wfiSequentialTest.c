@@ -24,7 +24,7 @@ int testFloydWarshall(const int n, const int errorCode) {
 }
 
 int main(int argc, char* argv[]) {
-    printf("WFI OpenCL Test:\n");
+    printf("WFI Sequential Test:\n");
     int errorCode = 0;
     errorCode += testFloydWarshall(10, 1);
     errorCode += testFloydWarshall(100, 2);
