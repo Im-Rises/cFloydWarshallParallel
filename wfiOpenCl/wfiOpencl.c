@@ -6,7 +6,7 @@
 
 char* readProgramFile(const char* filename);
 
-void wfiOpenCl(int* A, int n, char* programSourceFilename, char* programFunction, cl_int status, cl_device_id* devices, int numDevices, cl_context context) {
+void wfiOpenCl(int* matrix, int n, char* programPath, char* programFunction, cl_int status, cl_device_id* devices, int numDevices, cl_context context) {
     cl_kernel kernel = NULL;
     cl_command_queue cmdQueue = NULL;
 
@@ -14,7 +14,7 @@ void wfiOpenCl(int* A, int n, char* programSourceFilename, char* programFunction
     cmdQueue = clCreateCommandQueue(context, devices[0], 0, &status);
 
     // STEP 6: Create program object
-    char* programSource = readProgramFile(programSourceFilename);
+    char* programSource = readProgramFile(programPath);
     if (programSource == NULL)
     {
         perror("Cannot read OpenCL file.\n");
@@ -38,15 +38,15 @@ void wfiOpenCl(int* A, int n, char* programSourceFilename, char* programFunction
     kernel = clCreateKernel(program, programFunction, &status);
 
     // STEP 9: Create OpenCL buffers
-    cl_mem A_buf = clCreateBuffer(context, CL_MEM_READ_WRITE, n * n * sizeof(int), NULL, &status);
-    status = clEnqueueWriteBuffer(cmdQueue, A_buf, CL_TRUE, 0, n * n * sizeof(int), A, 0, NULL, NULL);
+    cl_mem matrixBuffer = clCreateBuffer(context, CL_MEM_READ_WRITE, n * n * sizeof(int), NULL, &status);
+    status = clEnqueueWriteBuffer(cmdQueue, matrixBuffer, CL_TRUE, 0, n * n * sizeof(int), matrix, 0, NULL, NULL);
 
     // STEP 10: Configure work-item structure
     size_t globalWorkSize[2] = { n, n };
     printf("Global work size: %d, %d\n\n", (int)globalWorkSize[0], (int)globalWorkSize[1]);
 
     // STEP 11: Set kernel arguments
-    status = clSetKernelArg(kernel, 0, sizeof(cl_mem), &A_buf);
+    status = clSetKernelArg(kernel, 0, sizeof(cl_mem), &matrixBuffer);
     status = clSetKernelArg(kernel, 2, sizeof(cl_int), &n);
 
     // STEP 12: Enqueue kernel for execution and execute for each k = 0, 1, ..., n - 1
@@ -57,12 +57,12 @@ void wfiOpenCl(int* A, int n, char* programSourceFilename, char* programFunction
     }
 
     // STEP 13: Read the output buffer back to the host
-    status = clEnqueueReadBuffer(cmdQueue, A_buf, CL_TRUE, 0, n * n * sizeof(int), A, 0, NULL, NULL);
+    status = clEnqueueReadBuffer(cmdQueue, matrixBuffer, CL_TRUE, 0, n * n * sizeof(int), matrix, 0, NULL, NULL);
 
     clReleaseKernel(kernel);
     clReleaseProgram(program);
     clReleaseCommandQueue(cmdQueue);
-    clReleaseMemObject(A_buf);
+    clReleaseMemObject(matrixBuffer);
     free(programSource);
 }
 
