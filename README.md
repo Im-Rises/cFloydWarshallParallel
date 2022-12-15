@@ -50,11 +50,15 @@ more details.
 You can find details about the algorithms and the results in the [Algorithms](#Algorithms) and [Results](#Results)
 sections.
 
-> **Note**
+> **Note**  
 > The builed project is an exemple of the Floyd-Warshall algorithm.
 > If you want to use it in your program, you can find the functions in the [wfiOpenCl.h](wfiOpenCl/wfiOpenCl.h)
 > and [wfiOpenCl.c](wfiOpenCl/wfiOpenCl.c) file. You can find more details about its use in
 > the [How to use](#How-to-use) section.
+
+> **Note**  
+> A version of the Floyd-Warshall Parallel version also exist in the [oneFileVer/main.c](oneFileVer/main.c), 
+> It is exactly the same code but in a single file (for more readability).
 
 ## Algorithm
 
