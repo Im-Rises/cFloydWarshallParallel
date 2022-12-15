@@ -89,11 +89,17 @@ for k from 1 to n
 
 The results of the programs are shown in the following table:
 
-| Number of vertices (n) | Sequential Time (s) | Parallel OpenCL Time (s) |
-|------------------------|---------------------|--------------------------|
-| 100                    | 0.000000            | 0.000000                 |
-| 1000                   | 0.000000            | 0.000000                 |
-| 10000                  | 0.000000            | 0.000000                 |
+| Number of vertices (n) | Sequential Time (s) | Parallel OpenCL Time using GPU (s) |
+|------------------------|---------------------|------------------------------------|
+| 100                    | 0.002               | 0.016                              |
+| 500                    | 0.322               | 0.022                              |
+| 1000                   | 2.999               | 0.097                              |
+| 5000                   | 311.6               | 9.453                              |
+| 10000                  | $\infty$            | 109.0                              |
+
+> **Note**
+> The results may vary depending on the hardware used.
+> Do not use the sequential version for n > 10000, it will take too long.
 
 ## Compilation
 

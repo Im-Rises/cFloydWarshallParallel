@@ -7,6 +7,8 @@
 
 #define PRINT_MATRIX_THRESHOLD 30
 
+#include <time.h>
+
 int main(int argc, char* argv[]) {
     printf("|-----Floyd-Warshall parallel OpenCL algorithm-----|\n\n");
 
@@ -61,11 +63,16 @@ int main(int argc, char* argv[]) {
     printMatrix(A, n);
 
     // STEP 5-13: Call OpenCL functions
+    clock_t start = clock();
     wfiOpenCl(A, n, programSourceFilename, programFunction, status, devices, numDevices, context);
+    clock_t end = clock();
 
     // STEP 14: Display the result
     printf("Result:\n");
     printMatrix(A, n);
+
+    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+    printf("Time spent (Wrong value if using CPU): %f\n", time_spent);
 
     // STEP 15: Release OpenCL resources
     clReleaseContext(context);
