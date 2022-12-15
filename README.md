@@ -15,6 +15,8 @@ The algorithm is implemented in C and the OpenCL kernel is written in OpenCL C. 
 - [x] Sequential implementation
 - [x] Parallel implementation using OpenCL
 
+Available for Linux, macOS and Windows.
+
 ## Dependencies
 
 - C17 compiler
@@ -109,11 +111,16 @@ First, you need to install the OpenCL SDK. You can download it from the followin
 <https://www.khronos.org/opencl/sdk/>
 
 If you are using Windows, you need to install the OpenCL SDK from the link above. If you are using Linux, you can
-install
-the OpenCL SDK using the following command:
+install the OpenCL SDK using the following command:
 
 ```bash
 sudo apt install ocl-icd-opencl-dev
+```
+
+for macOS, you can install the OpenCL SDK using the following command:
+
+```bash
+brew install opencl-headers
 ```
 
 Then, you need to install CMake. You can download it from the following link:
