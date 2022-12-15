@@ -28,7 +28,6 @@ int main(int argc, char* argv[]) {
     // STEP 0: Init variables
     char* programSourceFilename = "data/program.cl";
     char* programFunction = "floydWarshall";
-    system("dir .");
     cl_int status = 0;
     cl_uint numPlatforms = 0;
     cl_platform_id* platforms = NULL;

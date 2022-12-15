@@ -3,7 +3,7 @@
 #include <sys/stat.h>
 
 #include "../common/commonFunctions.h"
-#include "wfiOpencl.h"
+#include "wfiOpenCl.h"
 
 #define PRINT_MATRIX_THRESHOLD 30
 

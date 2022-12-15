@@ -1,4 +1,4 @@
-#include "wfiOpencl.h"
+#include "wfiOpenCl.h"
 
 #include <stdio.h>
 #include <stdlib.h>
