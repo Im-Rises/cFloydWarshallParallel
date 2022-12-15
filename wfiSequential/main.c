@@ -6,17 +6,17 @@
 
 int main(int argc, char* argv[]) {
     printf("|-----Floyd-Warshall algorithm-----|\n\n");
-    // Check the command line arguments
-    //    if (argc != 2)
-    //    {
-    //        printf("Usage: %s <n value>\n", argv[0]);
-    //        return 1;
-    //    }
-    //    cl_int n = atoi(argv[1]);
+    //     Check the command line arguments
+    if (argc != 2)
+    {
+        printf("Usage: %s <n value>\n", argv[0]);
+        return 1;
+    }
+    int n = atoi(argv[1]);
 
-    // Read from command line
-    int n = 10;
-    scanf("%d", &n);
+    //    // Or Read from command line
+    //    int n = 10;
+    //    scanf("%d", &n);
 
     int* graph = generateTestMatrix(n);
 

@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.8)
 
 include_directories(${OpenCL_INCLUDE_DIRS})
 
-set(HDRS "../common/commonFunctions.h")
-set(SRCS "../common/commonFunctions.c")
+set(HDRS "../common/commonFunctions.h" "wfiOpencl.h")
+set(SRCS "../common/commonFunctions.c" "wfiOpencl.c")
 
 add_executable(${PROJECT_NAME} "main.c" ${HDRS} ${SRCS})
 
