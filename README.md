@@ -145,7 +145,10 @@ You can also compile separately the sequential and parallel programs:
 ```bash
 make wfiSeq
 make wfiPar
+make wfiParOneFile
 ```
+
+The output files are in the `buildMakeFile` folder.
 
 ### CMake build
 
