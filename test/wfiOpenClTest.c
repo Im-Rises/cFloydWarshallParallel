@@ -25,6 +25,7 @@ int testFloydWarshall(const int n, const int errorCode, char* programPath, char*
 }
 
 int main(int argc, char* argv[]) {
+    system("dir .");
     // STEP 0: Init variables
     char* programSourceFilename = "data/program.cl";
     char* programFunction = "floydWarshall";

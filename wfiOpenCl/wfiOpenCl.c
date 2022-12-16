@@ -17,7 +17,7 @@ void wfiOpenCl(int* matrix, int n, char* programPath, char* programFunction, cl_
     char* programSource = readProgramFile(programPath);
     if (programSource == NULL)
     {
-        perror("Cannot read OpenCL file.\n");
+        perror("Error: Cannot read OpenCL file.\n");
         exit(1);
     }
     cl_program program = clCreateProgramWithSource(context, 1, (const char**)&programSource, NULL, &status);
@@ -43,7 +43,7 @@ void wfiOpenCl(int* matrix, int n, char* programPath, char* programFunction, cl_
 
     // STEP 10: Configure work-item structure
     size_t globalWorkSize[2] = { n, n };
-    printf("Global work size: %d, %d\n\n", (int)globalWorkSize[0], (int)globalWorkSize[1]);
+    //    printf("Global work size: %d, %d\n\n", (int)globalWorkSize[0], (int)globalWorkSize[1]);
 
     // STEP 11: Set kernel arguments
     status = clSetKernelArg(kernel, 0, sizeof(cl_mem), &matrixBuffer);

@@ -62,6 +62,9 @@ sections.
 > A version of the Floyd-Warshall Parallel version also exist in the [oneFileVer/main.c](oneFileVer/main.c), 
 > It is exactly the same code but in a single file (for more readability).
 
+> **Warning**  
+> Be sure to set the working directory of your projet to the root. To correctely load the `program.cl` or simply change the path in your code.
+
 ## Algorithm
 
 The Floyd-Warshall algorithm is an algorithm for finding the shortest paths between all pairs of vertices in a weighted
