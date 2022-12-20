@@ -1,5 +1,7 @@
 #include "wfiSequential.h"
 
+#include <stdio.h>
+
 void floydWarshall(int* matrix, int n) {
     for (int k = 0; k < n; k++)
     {
