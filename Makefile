@@ -1,29 +1,38 @@
+CC=gcc
+CFLAGS=-std=c17 -Wall -O2
+LDFLAGS=
+OPENCL_FLAGS=-lOpenCL
+OUTPUT_DIR=buildMakeFile
+
 all:
 	$(MAKE) MrProper
 	$(MAKE) wfiSeq
 	$(MAKE) wfiPar
+	$(MAKE) wfiParOneFile
 	$(MAKE) clean
 
-wfiSeq:
-	gcc ./wfiSequential/main.c -o buildMakeFile/main.o -c -std=c17 -Wall -O2
-	gcc ./wfiSequential/wfiSequential.c -o buildMakeFile/wfiSequential.o -c -std=c17 -Wall -O2
-	gcc ./common/commonFunctions.c -o buildMakeFile/commonFunctions.o -c -std=c17 -Wall -O2
-	gcc -o buildMakeFile/wfiSequential buildMakeFile/main.o buildMakeFile/wfiSequential.o  buildMakeFile/commonFunctions.o -std=c17 -Wall -O2
+wfiSeq: commonFuncs
+	$(CC) ./wfiSequential/main.c -o $(OUTPUT_DIR)/main.o -c $(CFLAGS) $(LDFLAGS)
+	$(CC) ./wfiSequential/wfiSequential.c -o $(OUTPUT_DIR)/wfiSequential.o -c $(CFLAGS) $(LDFLAGS)
+	$(CC) -o $(OUTPUT_DIR)/wfiSequential $(OUTPUT_DIR)/main.o $(OUTPUT_DIR)/wfiSequential.o  $(OUTPUT_DIR)/commonFunctions.o $(CFLAGS) $(LDFLAGS)
 
-wfiPar:
-	gcc ./wfiOpenCl/main.c -o buildMakeFile/main.o -c -std=c17 -Wall -O2
-	gcc ./wfiOpenCl/wfiOpenCl.c -o buildMakeFile/wfiOpenCl.o -c -lOpenCL -std=c17 -Wall -O2
-	gcc ./common/commonFunctions.c -o buildMakeFile/commonFunctions.o -c -std=c17 -Wall -O2
-	gcc -o buildMakeFile/wfiOpenCl buildMakeFile/main.o buildMakeFile/wfiOpenCl.o  buildMakeFile/commonFunctions.o -lOpenCL -std=c17 -Wall -O2
+wfiPar: commonFuncs
+	$(CC) ./wfiOpenCl/main.c -o $(OUTPUT_DIR)/main.o -c $(CFLAGS) $(LDFLAGS)
+	$(CC) ./wfiOpenCl/wfiOpenCl.c -o $(OUTPUT_DIR)/wfiOpenCl.o -c $(CFLAGS) $(LDFLAGS) $(OPENCL_FLAGS)
+	$(CC) ./common/commonFunctions.c -o $(OUTPUT_DIR)/commonFunctions.o -c $(CFLAGS) $(LDFLAGS)
+	$(CC) -o $(OUTPUT_DIR)/wfiOpenCl $(OUTPUT_DIR)/main.o $(OUTPUT_DIR)/wfiOpenCl.o  $(OUTPUT_DIR)/commonFunctions.o $(CFLAGS) $(LDFLAGS) $(OPENCL_FLAGS)
 
-wfiParOneFile:
-	gcc -o buildMakeFile/wfiOpenClOneFile wfiOpenClOneFile/main.c -lOpenCL -std=c17 -Wall -O2  #-Wextra -Werror -pedantic
+wfiParOneFile: commonFuncs
+	$(CC) -o $(OUTPUT_DIR)/wfiOpenClOneFile wfiOpenClOneFile/main.c $(CFLAGS) $(LDFLAGS) $(OPENCL_FLAGS)
+
+commonFuncs:
+	$(CC) common/commonFunctions.c -o $(OUTPUT_DIR)/commonFunctions.o -c $(CFLAGS) $(LDFLAGS)
 
 MrProper : clean
-	rm -f buildMakeFile/primeNumberFinderSequential
-	rm -f buildMakeFile/primeNumberFinderMPI
-	rm -f buildMakeFile/twinPrimeNumberFinderMPI
+	rm -f $(OUTPUT_DIR)/wfiSequential
+	rm -f $(OUTPUT_DIR)/wfiOpenCl
+	rm -f $(OUTPUT_DIR)/wfiOpenClOneFile
 	$(MAKE) clean
 
 clean :
-	rm -rf buildMakeFile/*.o
+	rm -rf $(OUTPUT_DIR)/*.o

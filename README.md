@@ -35,7 +35,7 @@ Available for Linux, macOS and Windows.
     - [Parallel OpenCL algorithm](#Parallel-OpenCL-algorithm)
 - [Results](#Results)
 - [Compilation](#Compilation)
-    - [Compilation set up](#Compilation set up)
+    - [Compilation set up](#Compilation-set-up)
     - [Makefile build](#Makefile-build)
     - [CMake build](#CMake-build)
 - [How to use](#How-to-use)
@@ -208,6 +208,8 @@ cFloydWarshallParallel
 |  ├── main
 |  ├── wfiOpenCL.c
 |  ├── wfiOpenCL.h
+├── wfiOpenCLOneFile
+|  ├── main.c
 ├── wfiSequential
 |  ├── CMakeLists.txt
 |  ├── main
